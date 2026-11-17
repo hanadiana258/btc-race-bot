@@ -4,13 +4,14 @@ import sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "vendor"))
 import makefun_bars
 
-LOOK = 80
-DIP = 0.0045
-PROFIT = 0.01
-STOP = 0.05
+LOOK = 60  # bars of momentum context
+DIP = 0.004  # dip threshold to enter
+PROFIT = 0.012  # take profit above costs (fees 4bps + slippage 2bps + impact)
+STOP = 0.04  # stop loss
 
 closes = []
 entry = 0.0
+
 
 def on_batch(state, batch):
     global entry
@@ -39,5 +40,6 @@ def on_batch(state, batch):
                 orders.append({"side": "buy", "symbol": sym, "notional_quote_units": spend, "max_slippage_bps": 300})
                 entry = now
     return orders
+
 
 makefun_bars.run(on_batch)
